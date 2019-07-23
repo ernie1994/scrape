@@ -1,0 +1,60 @@
+<div class="row mt-5">
+    <div class="col d-flex justify-content-center">
+        <button id="scrape" class="btn btn-primary btn-lg">SCRAPE</button>
+    </div>
+</div>
+
+<script>
+
+    function makeArticle(article) {
+        let card = $("<div>")
+            .addClass("card col-lg-3")
+            .css("width", "18rem");
+
+        let img = $("<img>")
+            .addClass("card-img-top")
+            .attr("src", article.image);
+
+        card.append(img);
+
+        let body = $("<div>")
+            .addClass("card-body");
+
+        let headline = $("<h5>")
+            .addClass("card-title")
+            .text(article.headline);
+
+        body.append(headline);
+
+        let summary = $("<p>")
+            .addClass("card-text")
+            .text(article.summary);
+
+        body.append(summary);
+
+        card.append(body);
+
+        let save = $("<button>")
+            .addClass("save btn btn-sm btn-dark my-3")
+            .attr("data-id", article._id)
+            .text(article.saved ? "Unsave" : "Save");
+
+        card.append(save);
+
+        $("#articles").append(card);
+    }
+
+
+    $("#scrape").click(function () {
+        $.ajax({
+            method: "GET",
+            url: "/scrape"
+        }).then(res => {
+            $("#articles").empty();
+            res.forEach(article => makeArticle(article));
+        });
+    });
+
+    $("#title").text("MONGO SCRAPER");
+    $("#subtitle").text("WASHINGTON POST EDITION");
+</script>

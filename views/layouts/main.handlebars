@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="./styles/index.css" media="screen" title="no title" charset="utf-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <title>Washington Post Scraper</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/">Washington Post Scraper</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/saved">Saved Articles</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container-fluid">
+
+        <div class="row mt-5 d-flex justify-content-center">
+            <div class="col">
+                <div class="jumbotron" style="background-color:black;">
+                    <h1 id="title" class="display-2" style="color:white;text-align:center;"></h1>
+                    <h6 id="subtitle" style="color:white;text-align:center"></h6>
+                </div>
+            </div>
+        </div>
+
+        {{{body}}}
+
+        <div id="articles" class="row mt-5 d-flex justify-content-center">
+            {{#each articles}}
+            <div data-id={{this._id}} class="card col-lg-3" style="width:18rem">
+                <img src={{this.image}} class="card-img-top">
+                <div class="card-body">
+                    <h5 class="card-title">{{this.headline}}</h5>
+                    <p class="card-text">{{this.summary}}</p>
+                    <button data-id={{this._id}} style="width:100%" class="save btn btn-dark btn-sm my-3">
+                        {{#if this.saved}}
+                        Unsave
+                        {{/if}}
+                        {{#unless this.saved}}
+                        Save
+                        {{/unless}}
+                    </button>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+    <script src="/article.js"></script>
+</body>
+
+</html>
