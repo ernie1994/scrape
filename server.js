@@ -20,7 +20,6 @@ app.get("/", (_req, res) => {
     db.Article.find({ saved: false }).then(articles => {
         res.render("home", { articles: articles });
     });
-    // db.Article.deleteMany({}, err => res.json(err));
 });
 
 app.get("/scrape", (_req, res) => {
@@ -93,8 +92,8 @@ app.put("/save/:id", (req, res) => {
     db.Article.findById(req.params.id, (err, article) => {
         if (err) return res.json(err);
         article.saved = !article.saved;
-        var updArticle = new db.Article(article);
-        updArticle.save((err) => {
+        var articleModel = new db.Article(article);
+        articleModel.save((err) => {
             if (err) {
                 article.saved = !article.saved;
             }
@@ -116,7 +115,7 @@ app.get("/comment/:articleId", (req, res) => {
 
 app.post("/comment/:articleId", (req, res) => {
     db.Comment.create(req.body)
-        .then((note) => {
+        .then(note => {
             return db.Article.findOneAndUpdate({ _id: req.params.articleId }, { $push: { comments: note._id } }, { new: true });
         })
         .catch(err => {
@@ -134,10 +133,6 @@ app.delete("/comment/:noteId", (req, res) => {
             if (err) return res.json(err);
         });
 });
-
-
-
-
 
 var MONGODB_URI = process.env.MONGODB_URI ||
     "mongodb://localhost/mongoHeadlines";
