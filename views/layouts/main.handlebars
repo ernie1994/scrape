@@ -5,11 +5,11 @@
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="./styles/index.css" media="screen" title="no title" charset="utf-8">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/styles/index.css" media="screen" title="no title" charset="utf-8">
     <title>Washington Post Scraper</title>
 </head>
 
@@ -45,21 +45,25 @@
 
         {{{body}}}
 
-        <div id="articles" class="row mt-5 d-flex justify-content-center">
+        <div id="articles" class="row d-flex justify-content-center">
             {{#each articles}}
-            <div data-id={{this._id}} class="card col-lg-3" style="width:18rem">
-                <img src={{this.image}} class="card-img-top">
-                <div class="card-body">
-                    <h5 class="card-title">{{this.headline}}</h5>
-                    <p class="card-text">{{this.summary}}</p>
-                    <button data-id={{this._id}} style="width:100%" class="save btn btn-dark btn-sm my-3">
-                        {{#if this.saved}}
-                        Unsave
-                        {{/if}}
-                        {{#unless this.saved}}
-                        Save
-                        {{/unless}}
-                    </button>
+            <div class="col-lg-3 col-md-6 d-flex justify-content-center my-3">
+                <div data-id={{this._id}} class="card shadow-lg" style="width:25rem;">
+                    <img src={{this.image}} class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">{{this.headline}}</h5>
+                        <p class="card-text">{{this.summary}}</p>
+                    </div>
+                    <div class="card-footer">
+                        <button data-id={{this._id}} style="width:100%" class="save btn btn-dark btn-sm my-3">
+                            {{#if this.saved}}
+                            Unsave
+                            {{/if}}
+                            {{#unless this.saved}}
+                            Save
+                            {{/unless}}
+                        </button>
+                    </div>
                 </div>
             </div>
             {{/each}}

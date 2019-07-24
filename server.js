@@ -104,9 +104,7 @@ app.put("/save/:id", (req, res) => {
 });
 
 app.get("/comment/:articleId", (req, res) => {
-    console.log(req.params.articleId);
-    var id = new mongoose.Types.ObjectId(req.params.articleId);
-    db.Article.findById(id)
+    db.Article.findById(req.params.articleId)
         .populate("comments")
         .then(article => {
             res.json(article);
@@ -126,6 +124,16 @@ app.post("/comment/:articleId", (req, res) => {
         })
 });
 
+app.delete("/comment/:noteId", (req, res) => {
+    var noteId = req.params.noteId;
+    db.Comment.deleteOne({ _id: noteId })
+        .then(() => {
+            res.sendStatus(200);
+        })
+        .catch(err => {
+            if (err) return res.json(err);
+        });
+});
 
 
 

@@ -1,5 +1,10 @@
 $(document).ready(function () {
 
+    var articleId;
+
+    $("#title").text("SAVED ARTICLES");
+    $("#subtitle").text("READ THEM AGAIN & AGAIN");
+
     $(document.body).on("click", ".save", function () {
         $(this).closest(".card").remove();
     });
@@ -15,31 +20,40 @@ $(document).ready(function () {
             .attr("data-target", "#myModal")
             .css(btnStyle)
             .text("Notes");
-        $(element).append(noteBtn);
 
-        var articleId = $(element).closest(".card").attr("data-id");
+        $(element).parent().children(".card-footer").prepend(noteBtn);
 
-        $(".modal").attr("data-id", articleId);
+        // var articleId = $(element).closest(".card").attr("data-id");
+
+        // $(".modal").attr("data-id", articleId);
     });
 
     $(document.body).on("click", ".addNote", function () {
         $("#notes").empty();
-        var articleId = $(this).closest(".card").attr("data-id");
+        var id = $(this).closest(".card").attr("data-id");
+        articleId = id;
         $.ajax({
             method: "GET",
-            url: `/comment/${articleId}}`
+            url: `/comment/${id}`
         }).then(article => {
-            console.log(article);
             if (!article.comments) return;
             article.comments.forEach(comment => {
-                console.log(1);
-                let p = $("<p>");
-                p.text(comment.body);
+                let p = $("<p>")
+                    .text(comment.body)
+                    .css("float", "left");
 
                 let item = $("<li>")
                     .addClass("list-group-item");
 
                 item.append(p);
+
+                let deleteNote = $("<button>")
+                    .addClass("deleteNote btn btn-light")
+                    .html("&#10006")
+                    .attr("data-note-id", comment._id)
+                    .css("float", "right");
+
+                item.append(deleteNote);
 
                 $("#notes").append(item);
             });
@@ -47,7 +61,6 @@ $(document).ready(function () {
     });
 
     $(document.body).on("click", "#saveNote", function () {
-        var articleId = $(".modal").attr("data-id");
         $.ajax({
             method: "POST",
             url: `/comment/${articleId}`,
@@ -56,5 +69,23 @@ $(document).ready(function () {
             }
         });
     });
+
+    $(document.body).on("click", ".deleteNote", function () {
+        var noteId = $(this).attr("data-note-id");
+        $.ajax({
+            method: "DELETE",
+            url: `/comment/${noteId}`
+        }).then(res => {
+            if (res === "OK") {
+                $(this).parent().remove();
+            } else {
+                prompt("Unable to delete note");
+            }
+        });
+    });
+
+    $('#myModal').on('hidden.bs.modal', function () {
+        $("#noteInput").val(null);
+    })
 
 });
